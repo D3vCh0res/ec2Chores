@@ -55,11 +55,15 @@ if __name__ == "__main__":
             if tag["Key"] == "Name":
                 if tag["Value"] == ec2Name:
                     instance_id = instance["InstanceId"]
-    ec2_resource = boto3.resource('ec2')
-    instance = ec2_resource.Instance(instance_id)
-    if state.lower() == "start":
-        startInstance(instance)
-    elif state.lower() == "stop":
-        stopInstance(instance)
+    if instance_id == "":
+        print(" Instance '%s' not found" % (ec2Name))
     else:
-        print("Invalid Option")
+        ec2_resource = boto3.resource('ec2')
+        instance = ec2_resource.Instance(instance_id)
+        if state.lower() == "start":
+            startInstance(instance)
+        elif state.lower() == "stop":
+            stopInstance(instance)
+        else:
+            print("Invalid Option")
+    
