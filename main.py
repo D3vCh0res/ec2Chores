@@ -9,7 +9,7 @@ ec2_pem_location = ""
 def stopInstance(instance):
     # Do a dryrun first to verify permissions
     try:
-        print("Dry run - stop")
+        #print("Dry run - stop")
         response = instance.stop( DryRun=True, Force=True )
     except ClientError as e:
         if 'DryRunOperation' not in str(e):
@@ -18,6 +18,7 @@ def stopInstance(instance):
         print("Actual run - stop")
         response = instance.stop( DryRun=False, Force=True )
         #print(response)
+        print("waiting to be stopped ...")
         instance.wait_until_stopped()
         print("Stopped Instance")
     except ClientError as e:
@@ -26,7 +27,7 @@ def stopInstance(instance):
 def startInstance(instance):
     # Do a dryrun first to verify permissions
     try:
-        print("Dry run - start")
+        #print("Dry run - start")
         response = instance.start(AdditionalInfo='string', DryRun=True)
     except ClientError as e:
         if 'DryRunOperation' not in str(e):
@@ -35,8 +36,9 @@ def startInstance(instance):
         print("Actual run - start")
         response = instance.start(AdditionalInfo='string', DryRun=False)
         #print(response)
+        print("waiting to be running ...")
         instance.wait_until_running()
-        print("Started Instance - Opening terminal")
+        print("Started Instance")
         instance_ip = instance.public_ip_address
         print("public_ip: " + instance_ip)
     except ClientError as e:
